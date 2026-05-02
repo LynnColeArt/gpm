@@ -1,0 +1,15 @@
+{
+  "name": "github.com/LynnColeArt/gpm",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Go-native package and workspace manager",
+  "scripts": {
+    "build": "go build ./...",
+    "test": "go test ./...",
+    "fmt": "gofmt -w .",
+    "tidy": "go mod tidy"
+  },
+  "workspaces": [],
+  "registries": {},
+  "tools": {}
+}
