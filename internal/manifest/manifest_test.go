@@ -44,3 +44,17 @@ func TestValidateRejectsEmptyName(t *testing.T) {
 		t.Fatal("expected validation error for empty name")
 	}
 }
+
+func TestValidateRejectsToolWithoutVersion(t *testing.T) {
+	t.Parallel()
+
+	file := Default("demo")
+	file.Tools["golangci-lint"] = Tool{
+		Module:  "github.com/golangci/golangci-lint/cmd/golangci-lint",
+		Version: "",
+	}
+
+	if err := Validate(file); err == nil {
+		t.Fatal("expected validation error for missing tool version")
+	}
+}

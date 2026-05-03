@@ -17,6 +17,16 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		return 0
 	case "init":
 		return runInit(args[1:], stdout, stderr)
+	case "add":
+		return runAdd(args[1:], stdout, stderr)
+	case "remove":
+		return runRemove(args[1:], stdout, stderr)
+	case "install":
+		return runInstall(args[1:], stdout, stderr)
+	case "update":
+		return runUpdate(args[1:], stdout, stderr)
+	case "exec":
+		return runExec(args[1:], stdout, stderr)
 	case "run":
 		return runScript(args[1:], stdout, stderr)
 	case "doctor":
@@ -35,6 +45,11 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Usage:")
 	fmt.Fprintln(w, "  gpm init [--force] [--name <name>] [--private=<true|false>]")
+	fmt.Fprintln(w, "  gpm add <module>[@version]")
+	fmt.Fprintln(w, "  gpm remove <module>[@version]")
+	fmt.Fprintln(w, "  gpm install")
+	fmt.Fprintln(w, "  gpm update [<module>[@version] ...]")
+	fmt.Fprintln(w, "  gpm exec <tool-name> [-- <arg>...]")
 	fmt.Fprintln(w, "  gpm run <script-name> [-- <arg>...]")
 	fmt.Fprintln(w, "  gpm doctor")
 	fmt.Fprintln(w, "  gpm app install <package-or-module>[@<version>] [--scope user|global] [--bin-dir <path>]")

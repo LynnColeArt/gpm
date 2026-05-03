@@ -293,6 +293,12 @@ Rules:
 - `gpm.lock` captures the higher-level package manager view.
 - `gpm` must fail loudly if `gpm.lock` and the actual Go module state diverge.
 
+The current implementation direction is:
+
+- `gpm add`, `gpm remove`, `gpm install`, and `gpm update` write `gpm.lock`
+- the initial lockfile captures resolved `go.mod` requirements and declared tool targets
+- richer registry source metadata and strict divergence enforcement remain future Phase 1 work
+
 ## 13. Scripts
 
 Scripts are one of the main reasons this product exists.
@@ -376,6 +382,16 @@ Phase 1 should treat registries as configured upstreams and add a better UX arou
 
 Phase 2 may introduce a `gpm` registry service that speaks the Go proxy protocol and adds higher-level package metadata APIs.
 
+When that service exists, the registry/index model should follow a strict separation of concerns:
+
+- proxy-compatible module artifacts are canonical for fetchable module payloads
+- package/version metadata is canonical for higher-level `gpm` registry state
+- search and discovery indexes are derived data and must be rebuildable
+
+Direct installation and resolution must not depend on the search index being available.
+
+See [docs/registry-index-design.md](registry-index-design.md) for the concrete design direction.
+
 ## 16. Publishing
 
 `gpm publish` should provide a higher-level publishing flow than raw Git tag choreography without breaking Go's expectations.
@@ -409,6 +425,13 @@ Go teams often depend on code generators, linters, mock generators, and release 
 - executing tool binaries consistently in scripts and CI
 
 This gives teams a coherent alternative to scattered `tools.go` files, shell bootstraps, or manual installation docs.
+
+The current implementation direction is:
+
+- declare tools in `gpm.json`
+- install them into a project-local managed bin directory
+- make `gpm install` hydrate those binaries
+- make `gpm run` and `gpm exec` use the managed bin directory automatically
 
 ## 18. Binary App Installation
 
@@ -703,7 +726,7 @@ If `gpm` relies on unstable parsing of human-oriented `go` output, it will becom
 ## 27. Open Questions
 
 1. Should `gpm` prefer JSON, TOML, or YAML for the manifest long term, even if the first draft uses JSON?
-2. Should `gpm` manage tool binaries in a project-local cache, a user-wide cache, or both?
+2. Should `gpm` eventually support both project-local and user-wide tool caches, even though the initial implementation is project-local?
 3. What should the default user-scope binary directory be on each platform?
 4. Should `gpm publish` require Git cleanliness by default?
 5. How much of workspace state should be mirrored into `go work` versus managed purely in `gpm` metadata?

@@ -19,7 +19,13 @@ type File struct {
 	Scripts     map[string]string `json:"scripts,omitempty"`
 	Workspaces  []string          `json:"workspaces,omitempty"`
 	Registries  map[string]any    `json:"registries,omitempty"`
-	Tools       map[string]any    `json:"tools,omitempty"`
+	Tools       map[string]Tool   `json:"tools,omitempty"`
+}
+
+type Tool struct {
+	Module  string `json:"module"`
+	Version string `json:"version"`
+	Binary  string `json:"binary,omitempty"`
 }
 
 func Default(name string) *File {
@@ -36,7 +42,7 @@ func Default(name string) *File {
 		},
 		Workspaces: []string{},
 		Registries: map[string]any{},
-		Tools:      map[string]any{},
+		Tools:      map[string]Tool{},
 	}
 }
 
@@ -101,6 +107,17 @@ func Validate(file *File) error {
 			return fmt.Errorf("script %q command cannot be empty", name)
 		}
 	}
+	for name, tool := range file.Tools {
+		if strings.TrimSpace(name) == "" {
+			return errors.New("tool name cannot be empty")
+		}
+		if strings.TrimSpace(tool.Module) == "" {
+			return fmt.Errorf("tool %q module is required", name)
+		}
+		if strings.TrimSpace(tool.Version) == "" {
+			return fmt.Errorf("tool %q version is required", name)
+		}
+	}
 	return nil
 }
 
@@ -118,6 +135,6 @@ func normalize(file *File) {
 		file.Registries = map[string]any{}
 	}
 	if file.Tools == nil {
-		file.Tools = map[string]any{}
+		file.Tools = map[string]Tool{}
 	}
 }

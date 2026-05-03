@@ -1,0 +1,7 @@
+{
+  "lockVersion": 1,
+  "modulePath": "github.com/LynnColeArt/gpm",
+  "goVersion": "1.25.4",
+  "dependencies": [],
+  "tools": {}
+}

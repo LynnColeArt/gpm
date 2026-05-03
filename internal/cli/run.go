@@ -11,6 +11,7 @@ import (
 
 	"github.com/LynnColeArt/gpm/internal/manifest"
 	"github.com/LynnColeArt/gpm/internal/project"
+	"github.com/LynnColeArt/gpm/internal/tooling"
 )
 
 func runScript(args []string, stdout, stderr io.Writer) int {
@@ -56,7 +57,8 @@ func runScript(args []string, stdout, stderr io.Writer) int {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
-	cmd.Env = append(os.Environ(),
+	cmd.Env = tooling.AppendBinToEnv(os.Environ(), root.Dir)
+	cmd.Env = append(cmd.Env,
 		"GPM_PROJECT_ROOT="+root.Dir,
 		"GPM_MANIFEST_PATH="+root.ManifestPath,
 		"GPM_SCRIPT_NAME="+scriptName,

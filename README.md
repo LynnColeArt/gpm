@@ -14,12 +14,52 @@ go install github.com/LynnColeArt/gpm/cmd/gpm@latest
 
 ```text
 gpm init
+gpm add
+gpm remove
+gpm install
+gpm update
+gpm exec
 gpm run
 gpm doctor
 gpm app install
 gpm app list
 gpm app uninstall
 ```
+
+## Tool Dependencies
+
+`gpm` can pin repo-local tools in `gpm.json` and install them into `.gpm/tools/bin`:
+
+```json
+{
+  "tools": {
+    "golangci-lint": {
+      "module": "github.com/golangci/golangci-lint/cmd/golangci-lint",
+      "version": "v1.64.8"
+    }
+  }
+}
+```
+
+Run `gpm install` to hydrate the tool binaries, then `gpm exec golangci-lint -- run` or call the tool directly from `gpm run` scripts. `gpm run` automatically prepends the managed tool bin dir to `PATH`.
+
+If the installed executable name differs from the manifest key, set `binary` explicitly:
+
+```json
+{
+  "tools": {
+    "strgen": {
+      "module": "golang.org/x/tools/cmd/stringer",
+      "version": "v0.38.0",
+      "binary": "stringer"
+    }
+  }
+}
+```
+
+## Lockfile
+
+`gpm add`, `gpm remove`, `gpm install`, and `gpm update` keep `gpm.lock` in sync with the current `go.mod` state plus declared tool dependencies. The initial lockfile is intentionally narrow: it captures resolved module requirements and pinned tool targets without trying to replace `go.sum`.
 
 ## Project Status
 
