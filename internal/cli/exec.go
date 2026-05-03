@@ -41,6 +41,11 @@ func runExec(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 
+	if err := requireCurrentLockfile(root, file); err != nil {
+		fmt.Fprintf(stderr, "check project lock state: %v\n", err)
+		return 1
+	}
+
 	if err := tooling.Exec(root.Dir, file, toolName, passthrough, stdout, stderr); err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {

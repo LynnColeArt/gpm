@@ -297,6 +297,7 @@ The current implementation direction is:
 
 - `gpm add`, `gpm remove`, `gpm install`, and `gpm update` write `gpm.lock`
 - `gpm doctor` reports missing or drifted `gpm.lock` state
+- `gpm run` and `gpm exec` reject stale `gpm.lock` state and point back to `gpm install`
 - the initial lockfile captures resolved `go.mod` requirements and declared tool targets
 - richer registry source metadata and strict divergence enforcement remain future Phase 1 work
 

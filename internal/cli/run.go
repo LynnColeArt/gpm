@@ -43,6 +43,11 @@ func runScript(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 
+	if err := requireCurrentLockfile(root, file); err != nil {
+		fmt.Fprintf(stderr, "check project lock state: %v\n", err)
+		return 1
+	}
+
 	commandText, ok := file.Scripts[scriptName]
 	if !ok {
 		fmt.Fprintf(stderr, "script %q not found in %s\n", scriptName, root.ManifestPath)
