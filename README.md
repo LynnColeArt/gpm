@@ -59,7 +59,7 @@ If the installed executable name differs from the manifest key, set `binary` exp
 
 ## Lockfile
 
-`gpm add`, `gpm remove`, `gpm install`, and `gpm update` keep `gpm.lock` in sync with the current `go.mod` state plus declared tool dependencies. The initial lockfile is intentionally narrow: it captures resolved module requirements and pinned tool targets without trying to replace `go.sum`.
+`gpm add`, `gpm remove`, `gpm install`, and `gpm update` keep `gpm.lock` in sync with the current `go.mod` state plus declared tool dependencies. `gpm doctor` also checks whether `gpm.lock` has drifted from the current module and tool state. The initial lockfile is intentionally narrow: it captures resolved module requirements and pinned tool targets without trying to replace `go.sum`.
 
 ## Project Status
 

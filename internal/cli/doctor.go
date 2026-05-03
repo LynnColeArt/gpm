@@ -11,6 +11,7 @@ import (
 
 	"github.com/LynnColeArt/gpm/internal/apps"
 	"github.com/LynnColeArt/gpm/internal/config"
+	"github.com/LynnColeArt/gpm/internal/lockfile"
 	"github.com/LynnColeArt/gpm/internal/manifest"
 	"github.com/LynnColeArt/gpm/internal/project"
 )
@@ -61,14 +62,29 @@ func runDoctor(args []string, stdout, stderr io.Writer) int {
 	} else {
 		checks = append(checks, doctorCheck{Name: "gpm manifest", Status: doctorOK, Details: root.ManifestPath})
 
-		if file, err := manifest.Load(root.ManifestPath); err != nil {
+		var file *manifest.File
+		if loaded, err := manifest.Load(root.ManifestPath); err != nil {
 			checks = append(checks, doctorCheck{Name: "manifest validation", Status: doctorFail, Details: err.Error()})
 		} else {
+			file = loaded
 			checks = append(checks, doctorCheck{Name: "manifest validation", Status: doctorOK, Details: fmt.Sprintf("name=%s version=%s scripts=%d", file.Name, file.Version, len(file.Scripts))})
 		}
 
 		if project.HasGoMod(root.Dir) {
 			checks = append(checks, doctorCheck{Name: "go.mod", Status: doctorOK, Details: root.GoModPath})
+
+			if file != nil {
+				result, err := lockfile.Check(root.Dir, file)
+				if err != nil {
+					checks = append(checks, doctorCheck{Name: "gpm.lock", Status: doctorFail, Details: err.Error()})
+				} else if !result.Exists {
+					checks = append(checks, doctorCheck{Name: "gpm.lock", Status: doctorWarn, Details: fmt.Sprintf("missing %s; run gpm install", result.LockPath)})
+				} else if !result.Current() {
+					checks = append(checks, doctorCheck{Name: "gpm.lock", Status: doctorFail, Details: result.Summary()})
+				} else {
+					checks = append(checks, doctorCheck{Name: "gpm.lock", Status: doctorOK, Details: result.LockPath})
+				}
+			}
 		} else {
 			checks = append(checks, doctorCheck{Name: "go.mod", Status: doctorWarn, Details: "no go.mod found in project root"})
 		}
