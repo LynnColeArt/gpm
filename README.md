@@ -18,6 +18,7 @@ gpm add
 gpm remove
 gpm install
 gpm update
+gpm outdated
 gpm exec
 gpm run
 gpm doctor
@@ -60,6 +61,10 @@ If the installed executable name differs from the manifest key, set `binary` exp
 ## Lockfile
 
 `gpm add`, `gpm remove`, `gpm install`, and `gpm update` keep `gpm.lock` in sync with the current `go.mod` state plus declared tool dependencies. `gpm doctor` checks whether `gpm.lock` has drifted, and `gpm run`/`gpm exec` now refuse to use stale project state until `gpm install` refreshes it. The initial lockfile is intentionally narrow: it captures resolved module requirements and pinned tool targets without trying to replace `go.sum`.
+
+## Dependency Visibility
+
+`gpm outdated` shows actionable module dependency state from the current build list. By default it reports direct dependencies with available updates or other upgrade-related issues such as retraction or deprecation notices. Use `gpm outdated --all` to include indirect dependencies too.
 
 ## Project Status
 

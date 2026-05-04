@@ -515,6 +515,7 @@ gpm add
 gpm remove
 gpm install
 gpm update
+gpm outdated
 gpm run
 gpm exec
 gpm app
@@ -534,6 +535,7 @@ gpm config
 - `remove`: remove a direct dependency
 - `install`: reconcile dependencies, tools, lock, and workspace state
 - `update`: perform controlled upgrades
+- `outdated`: show upgrade opportunities and dependency health signals
 - `run`: execute named scripts
 - `exec`: execute package-managed tools without global install friction
 - `app`: install, list, and uninstall Go binary apps at user or global scope
@@ -645,6 +647,7 @@ Outcome:
 - `gpm install`
 - `gpm update`
 - `gpm.lock`
+- `gpm outdated`
 
 Outcome:
 

@@ -25,6 +25,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		return runInstall(args[1:], stdout, stderr)
 	case "update":
 		return runUpdate(args[1:], stdout, stderr)
+	case "outdated":
+		return runOutdated(args[1:], stdout, stderr)
 	case "exec":
 		return runExec(args[1:], stdout, stderr)
 	case "run":
@@ -49,6 +51,7 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w, "  gpm remove <module>[@version]")
 	fmt.Fprintln(w, "  gpm install")
 	fmt.Fprintln(w, "  gpm update [<module>[@version] ...]")
+	fmt.Fprintln(w, "  gpm outdated [--all]")
 	fmt.Fprintln(w, "  gpm exec <tool-name> [-- <arg>...]")
 	fmt.Fprintln(w, "  gpm run <script-name> [-- <arg>...]")
 	fmt.Fprintln(w, "  gpm doctor")
