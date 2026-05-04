@@ -10,6 +10,20 @@ The goal is to make common Go workflows feel more cohesive and discoverable: ini
 go install github.com/LynnColeArt/gpm/cmd/gpm@latest
 ```
 
+## Status
+
+`gpm` has completed the original Phase 0 scaffold and now has a working first pass on the Phase 1 dependency UX layer.
+
+Implemented today:
+
+- project bootstrap with `gpm init`
+- script execution with `gpm run`
+- environment diagnostics with `gpm doctor`
+- user/global Go app installs with `gpm app install`, `gpm app list`, and `gpm app uninstall`
+- module dependency management with `gpm add`, `gpm remove`, `gpm install`, `gpm update`, and `gpm outdated`
+- project-local tool pinning and execution through `.gpm/tools/bin`
+- `gpm.lock` generation, drift detection, and stale-lock enforcement for `gpm run` and `gpm exec`
+
 ## Current Commands
 
 ```text
@@ -66,6 +80,14 @@ If the installed executable name differs from the manifest key, set `binary` exp
 
 `gpm outdated` shows actionable module dependency state from the current build list. By default it reports direct dependencies with available updates or other upgrade-related issues such as retraction or deprecation notices. Use `gpm outdated --all` to include indirect dependencies too.
 
-## Project Status
+## Documentation
 
-This repo is still in early scaffolding. The product direction and Phase 0 contract live in [docs/gpm-spec.md](docs/gpm-spec.md) and [docs/phase-0-contract.md](docs/phase-0-contract.md).
+- [docs/current-state.md](docs/current-state.md): current shipped surface, validation snapshot, and next likely work
+- [docs/gpm-spec.md](docs/gpm-spec.md): product and architecture spec
+- [docs/phase-0-contract.md](docs/phase-0-contract.md): original Phase 0 implementation contract
+- [docs/registry-index-design.md](docs/registry-index-design.md): registry/index architecture direction
+- [docs/registry-metadata-schema.md](docs/registry-metadata-schema.md): proposed registry metadata schema
+
+## Notes
+
+The repo has a pushed checkpoint tag at `phase-1-foundation`, and development is currently proceeding directly on `main` in small slices.
